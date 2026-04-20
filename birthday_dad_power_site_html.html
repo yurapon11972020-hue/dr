@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>С днём рождения, папа!</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #09111f;
+      --bg2: #13213d;
+      --bg3: #1f4e79;
+      --gold: #f4c35a;
+      --gold-soft: #ffe4a3;
+      --blue: #5aa8ff;
+      --white: #f8fbff;
+      --line: rgba(255,255,255,0.14);
+      --glass: rgba(255,255,255,0.08);
+      --shadow: 0 24px 80px rgba(0,0,0,0.38);
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      color: var(--white);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top, rgba(90,168,255,0.18), transparent 20%),
+        radial-gradient(circle at 80% 20%, rgba(244,195,90,0.14), transparent 24%),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 45%, var(--bg3) 100%);
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .noise,
+    .particles,
+    .bursts,
+    .lights {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .noise::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(circle at center, black, transparent 85%);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 20px;
+    }
+
+    .pill {
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      color: rgba(248,251,255,0.92);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 34px;
+      align-items: center;
+      min-height: calc(100vh - 90px);
+      padding: 34px 0 26px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(244,195,90,0.3);
+      background: rgba(244,195,90,0.08);
+      color: var(--gold-soft);
+      backdrop-filter: blur(12px);
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      font-size: clamp(44px, 7vw, 84px);
+      line-height: 0.94;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      text-shadow: 0 14px 40px rgba(0,0,0,0.35);
+    }
+
+    .gradient {
+      display: block;
+      background: linear-gradient(90deg, #ffffff 0%, #8fc9ff 45%, #ffd577 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      margin-top: 22px;
+      max-width: 720px;
+      font-size: 20px;
+      line-height: 1.75;
+      color: rgba(248,251,255,0.88);
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    button {
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--white);
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      backdrop-filter: blur(12px);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, rgba(244,195,90,0.22), rgba(90,168,255,0.18));
+      box-shadow: 0 16px 40px rgba(244,195,90,0.14);
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+      max-width: 760px;
+    }
+
+    .stat,
+    .glass,
+    .block,
+    .message,
+    .letter {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat {
+      border-radius: 24px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: rgba(248,251,255,0.78);
+      font-size: 14px;
+    }
+
+    .glass {
+      position: relative;
+      border-radius: 34px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(244,195,90,0.16), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(90,168,255,0.16), transparent 38%);
+      pointer-events: none;
+    }
+
+    .inner {
+      position: relative;
+      border-radius: 28px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+    }
+
+    .label {
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .inner h2 {
+      font-size: 34px;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .photo-box {
+      width: min(100%, 310px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 32px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(135deg, rgba(90,168,255,0.22), rgba(244,195,90,0.16));
+      box-shadow: 0 22px 70px rgba(0,0,0,0.36);
+      position: relative;
+      animation: floatCard 5s ease-in-out infinite;
+    }
+
+    .photo-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 32px;
+      pointer-events: none;
+    }
+
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-placeholder {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      font-weight: 700;
+      color: rgba(248,251,255,0.9);
+      line-height: 1.6;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .hero-note h3 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .hero-note p {
+      color: rgba(248,251,255,0.82);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding-bottom: 30px;
+    }
+
+    .block {
+      border-radius: 30px;
+      padding: 28px;
+    }
+
+    .title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      margin-bottom: 18px;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .item {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(248,251,255,0.9);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .message-wrap {
+      padding: 8px 0 58px;
+    }
+
+    .message {
+      position: relative;
+      border-radius: 36px;
+      padding: 42px 26px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .message::before,
+    .message::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(42px);
+      opacity: 0.34;
+      pointer-events: none;
+    }
+
+    .message::before {
+      width: 240px;
+      height: 240px;
+      background: rgba(90,168,255,0.26);
+      top: -80px;
+      right: -70px;
+    }
+
+    .message::after {
+      width: 260px;
+      height: 260px;
+      background: rgba(244,195,90,0.24);
+      left: -80px;
+      bottom: -90px;
+    }
+
+    .medal {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 18px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 40px;
+      background: linear-gradient(135deg, rgba(244,195,90,0.18), rgba(90,168,255,0.16));
+      border: 1px solid rgba(255,255,255,0.14);
+      animation: pulse 2.8s infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .message h2 {
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .message > p {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 20px;
+      line-height: 1.75;
+      color: rgba(248,251,255,0.9);
+      position: relative;
+      z-index: 1;
+    }
+
+    .letter {
+      max-width: 900px;
+      margin: 24px auto 0;
+      border-radius: 26px;
+      padding: 22px;
+      text-align: left;
+      line-height: 1.85;
+      color: rgba(248,251,255,0.94);
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .letter.show {
+      display: block;
+      animation: fadeUp .35s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .particle,
+    .light,
+    .burst {
+      position: absolute;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .particle {
+      color: rgba(255,255,255,0.55);
+      animation: drift 9s ease-in-out infinite;
+      text-shadow: 0 0 18px rgba(255,255,255,0.18);
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: .25; }
+      25% { transform: translateY(-18px) translateX(10px) rotate(10deg); opacity: .7; }
+      50% { transform: translateY(12px) translateX(-8px) rotate(-8deg); opacity: .35; }
+      75% { transform: translateY(-8px) translateX(8px) rotate(5deg); opacity: .65; }
+    }
+
+    .light {
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      filter: blur(60px);
+      opacity: 0.18;
+      animation: breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: .12; }
+      50% { transform: scale(1.18); opacity: .24; }
+    }
+
+    .burst {
+      font-size: 22px;
+      animation: boom 1.25s ease-out forwards;
+      opacity: 1;
+      text-shadow: 0 0 20px rgba(255,255,255,0.35);
+    }
+
+    @keyframes boom {
+      0% { transform: translate(0, 0) scale(.35); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) scale(1.15); opacity: 0; }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 0 0 28px;
+      color: rgba(248,251,255,0.62);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .lead,
+      .message > p {
+        font-size: 17px;
+      }
+
+      .message,
+      .block {
+        padding: 22px 18px;
+      }
+
+      .hero-note h3 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="noise"></div>
+    <div class="lights" id="lights"></div>
+    <div class="particles" id="particles"></div>
+    <div class="bursts" id="bursts"></div>
+
+    <div class="container">
+      <div class="topbar">
+        <div class="pill">🏆 День главного человека</div>
+        <div class="pill">⚡ Для любимого папы</div>
+      </div>
+
+      <section class="hero">
+        <div>
+          <div class="badge">СИЛА • ХАРАКТЕР • УВАЖЕНИЕ • ЛЮБОВЬ</div>
+          <h1>
+            С днём рождения,
+            <span class="gradient">ПАПА!</span>
+          </h1>
+          <p class="lead">
+            Этот сайт — не просто открытка, а мощное поздравление для человека, который всегда был опорой,
+            примером силы, характера и надёжности. Сегодня весь день — только про тебя.
+          </p>
+
+          <div class="buttons">
+            <button class="btn-main" id="magicBtn">⚡ Включить эффект</button>
+            <button class="btn-ghost" id="letterBtn">📩 Открыть послание</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>Сила</strong>
+              <span>которая чувствуется во всём</span>
+            </div>
+            <div class="stat">
+              <strong>Опора</strong>
+              <span>на которую всегда можно положиться</span>
+            </div>
+            <div class="stat">
+              <strong>Уважение</strong>
+              <span>которое ты заслуживаешь каждый день</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="glass">
+            <div class="inner">
+              <div class="label">Legend card</div>
+              <h2>Главный герой этого дня</h2>
+
+              <div class="photo-box">
+                <img src="papa.jpg" alt="Фото папы">
+              </div>
+
+              <div class="hero-note">
+                <h3>Сильный. Надёжный. Настоящий.</h3>
+                <p>Человек, рядом с которым всегда спокойнее, увереннее и теплее.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="block">
+          <div class="title">🔥 За что тебя любят и ценят</div>
+          <div class="item">Ты умеешь быть опорой даже тогда, когда ничего не говоришь — просто своим присутствием.</div>
+          <div class="item">В тебе есть сила, спокойствие и уверенность, которые очень вдохновляют.</div>
+          <div class="item">Ты всегда стараешься сделать для семьи лучшее и это чувствуется во всём.</div>
+          <div class="item">С тобой рядом понимаешь, что есть человек, на которого правда можно положиться.</div>
+          <div class="item">Ты пример характера, мужества и настоящего внутреннего стержня.</div>
+        </div>
+
+        <div class="block">
+          <div class="title">🎯 Что хочется пожелать</div>
+          <div class="item">Пусть будет крепкое здоровье, много сил и энергии на всё, что для тебя важно.</div>
+          <div class="item">Пусть рядом будут люди, которые любят, ценят и искренне уважают тебя.</div>
+          <div class="item">Пусть каждый новый год жизни приносит уверенность, удачу и достойные победы.</div>
+          <div class="item">Пусть будет больше спокойствия, радости, хороших моментов и настоящего отдыха.</div>
+          <div class="item">Пусть всё, к чему ты идёшь, получается именно так, как ты хочешь.</div>
+        </div>
+      </section>
+
+      <section class="message-wrap">
+        <div class="message">
+          <div class="medal">🥇</div>
+          <h2>Главное послание</h2>
+          <p>
+            Папа, спасибо тебе за твою силу, поддержку, заботу и за то чувство уверенности, которое ты даёшь.
+            Ты очень важный человек в моей жизни. Пусть впереди будет много ярких дней, крепкого здоровья,
+            настоящего уважения, спокойствия и радости. Ты заслуживаешь самого лучшего.
+          </p>
+
+          <div class="letter" id="letterBox">
+            Папа, с днём рождения! Хочу сказать тебе спасибо за всё, что ты делаешь, за твой характер,
+            терпение, заботу и силу. Я очень ценю, что ты рядом, что на тебя можно равняться и что ты всегда
+            остаёшься человеком слова. Пусть у тебя будет крепкое здоровье, много энергии, удача в делах,
+            спокойствие в душе и как можно больше причин для хорошего настроения. Спасибо тебе за всё. Ты лучший.
+          </div>
+
+          <div class="buttons" style="justify-content:center; margin-top: 24px;">
+            <button class="btn-ghost" id="letterBtnBottom">📩 Показать послание</button>
+            <button class="btn-main" id="burstBtn">⚡ Ещё эффектов</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer">Сделано с уважением и любовью для самого сильного папы</div>
+    </div>
+  </div>
+
+  <script>
+    const particles = document.getElementById('particles');
+    const lights = document.getElementById('lights');
+    const bursts = document.getElementById('bursts');
+    const magicBtn = document.getElementById('magicBtn');
+    const burstBtn = document.getElementById('burstBtn');
+    const letterBtn = document.getElementById('letterBtn');
+    const letterBtnBottom = document.getElementById('letterBtnBottom');
+    const letterBox = document.getElementById('letterBox');
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function createLights() {
+      const colors = [
+        'rgba(90,168,255,0.22)',
+        'rgba(244,195,90,0.18)',
+        'rgba(255,255,255,0.08)'
+      ];
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement('div');
+        el.className = 'light';
+        el.style.left = random(-5, 90) + '%';
+        el.style.top = random(-5, 90) + '%';
+        el.style.background = colors[i % colors.length];
+        el.style.animationDelay = random(0, 4) + 's';
+        lights.appendChild(el);
+      }
+    }
+
+    function createParticles() {
+      const icons = ['✦', '•', '✧', '⚡', '★'];
+      for (let i = 0; i < 24; i++) {
+        const el = document.createElement('div');
+        el.className = 'particle';
+        el.textContent = icons[i % icons.length];
+        el.style.left = random(0, 100) + '%';
+        el.style.top = random(0, 100) + '%';
+        el.style.fontSize = random(12, 30) + 'px';
+        el.style.animationDuration = random(6, 12) + 's';
+        el.style.animationDelay = random(0, 4) + 's';
+        particles.appendChild(el);
+      }
+    }
+
+    function makeBurst() {
+      const icons = ['⚡', '✦', '★', '⬢', '✧'];
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      for (let i = 0; i < 34; i++) {
+        const el = document.createElement('div');
+        el.className = 'burst';
+        el.textContent = icons[i % icons.length];
+        const angle = (Math.PI * 2 * i) / 34;
+        const distance = random(90, 210);
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        el.style.left = centerX + 'px';
+        el.style.top = centerY + 'px';
+        el.style.setProperty('--x', x + 'px');
+        el.style.setProperty('--y', y + 'px');
+        el.style.fontSize = random(16, 30) + 'px';
+        bursts.appendChild(el);
+        setTimeout(() => el.remove(), 1250);
+      }
+    }
+
+    let letterVisible = false;
+    function toggleLetter() {
+      letterVisible = !letterVisible;
+      letterBox.classList.toggle('show', letterVisible);
+      letterBtn.textContent = letterVisible ? '📩 Скрыть послание' : '📩 Открыть послание';
+      letterBtnBottom.textContent = letterVisible ? '📩 Скрыть послание' : '📩 Показать послание';
+    }
+
+    magicBtn.addEventListener('click', makeBurst);
+    burstBtn.addEventListener('click', makeBurst);
+    letterBtn.addEventListener('click', toggleLetter);
+    letterBtnBottom.addEventListener('click', toggleLetter);
+
+    createLights();
+    createParticles();
+    setInterval(() => {
+      if (Math.random() > 0.45) makeBurst();
+    }, 5200);
+  </script>
+</body>
+</html>
